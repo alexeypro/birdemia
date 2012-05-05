@@ -2,21 +2,85 @@ class GameplayController < UIViewController
   @@SCREEN_WIDTH = 320
   @@SCREEN_HEIGHT = 480
   @@BORDER_PADDING = 30
+  @@FONT_SIZE = 22
   @@IMG_WIDTH = 100
   @@IMG_HEIGHT = 100
   @@START_WITH_N_BIRDS = 5
 
   def viewDidLoad
+    gameStart
+  end
+
+  def getColor(r, g, b)
+    return UIColor.colorWithRed(r/255.0, green:g/255.0, blue:b/255.0, alpha:1.0)
+  end  
+
+  def gameStart
     @birds_killed = 0
+    @time  = 1.0
+    @label = UILabel.alloc.init
+    @label.text = sprintf("00:%02d", @time)
+    @label.frame = CGRectMake(0, @@FONT_SIZE, @@SCREEN_WIDTH, @@BORDER_PADDING)
+    @label.font = UIFont.fontWithName("Copperplate-Bold", size: @@FONT_SIZE)
+    @label.textAlignment = UITextAlignmentCenter
+    @label.backgroundColor = UIColor.clearColor;
+    @label.textColor = getColor(95, 77, 77) #5F4D4D = 95,77,77
+    view.addSubview(@label)
     @@START_WITH_N_BIRDS.times do
       view.addSubview(getNewBird)
+    end
+    # start timer
+    if @timer == nil
+      @timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "timerHandler:", 
+                                                      userInfo: nil, repeats: true)
+    end
+    return true
+  end
+
+  def timerHandler(userInfo)
+    @time += 0.1
+    @label.text = sprintf("got %03d in %02d seconds", @birds_killed, @time)
+    if @time >= 19 && @time <= 25.0
+      @label.textColor = getColor(153, 31, 0)   #991F00 = 153, 31, 0
+    elsif @time > 25.0 && @time < 30.0
+      @label.textColor = getColor(209, 25, 25)  #D11919 = 209, 25, 25
+    elsif @time >= 5.0 #30.0
+      @timer.invalidate
+      @timer = nil
+      gameEnd
+    end
+  end
+
+  def gameEnd
+    NSLog("Game just ended -- you got " + @birds_killed.to_s + " birds killed!")
+    # get all image views and kill them all!
+    view.subviews.makeObjectsPerformSelector("removeFromSuperview")
+    # now let's offer you to facebook, tweet or repeat
+    alert = UIAlertView.alloc.initWithTitle("Birdaaaalicious..",
+                              message: "Wow! " + @birds_killed.to_s + " birds killed!",
+                              delegate: self,
+                              cancelButtonTitle:"Play again",
+                              otherButtonTitles:nil)
+    alert.addButtonWithTitle("Post on Facebook")
+    alert.addButtonWithTitle("Tweet to Twitter")
+    alert.show
+  end
+
+  def alertView(alertView, clickedButtonAtIndex:buttonIndex)
+    if buttonIndex == 1
+      puts "TODO: We are going to post to Facebook here..."
+    elsif buttonIndex == 2
+      puts "TODO: We are going to tweet to Twitter here..."
+    else
+      # pretty much any other case will start game again :-)
+      gameStart
     end
   end
 
   def getNewBird
     new_frame = CGRectMake(
-      myRandom(@@BORDER_PADDING, @@SCREEN_WIDTH - @@IMG_WIDTH - @@BORDER_PADDING), 
-      myRandom(@@BORDER_PADDING, @@SCREEN_HEIGHT - @@IMG_HEIGHT - @@BORDER_PADDING), 
+      myRandom(0, @@SCREEN_WIDTH - @@IMG_WIDTH - 0), 
+      myRandom(@@BORDER_PADDING + @@FONT_SIZE, @@SCREEN_HEIGHT - @@IMG_HEIGHT), 
       @@IMG_WIDTH, 
       @@IMG_HEIGHT
     )
@@ -56,13 +120,11 @@ class GameplayController < UIViewController
                                completion:lambda { |is_finished| img.removeFromSuperview if is_finished })
     # and add another one :-)
     view.addSubview(getNewBird)
-    @birds_killed = @birds_killed + 1
-    puts "Birds Killed = ", @birds_killed
+    @birds_killed += 1
   end
 
   def myRandom(from, to)
-    # alternative
-    return rand(to-from)+from
-    #return (from..to).to_a.sample
+    # alternative: return rand(to-from)+from
+    return (from..to).to_a.sample
   end
 end
