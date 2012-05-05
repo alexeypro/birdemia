@@ -3,9 +3,9 @@ class GameplayController < UIViewController
   @@SCREEN_HEIGHT = 480
   @@BORDER_PADDING = 30
   @@FONT_SIZE = 22
-  @@IMG_WIDTH = 100
+  @@IMG_WIDTH = 61
   @@IMG_HEIGHT = 100
-  @@START_WITH_N_BIRDS = 5
+  @@START_WITH_N_BIRDS = 6
 
   @@TWEET_LINK = "https://twitter.com/intent/tweet?source=birdemia&text="
   @@FBSHARE_LINK = "http://www.facebook.com/sharer.php?u=http%3A%2F%2Fbit.ly%2Fbirdemia&t="
@@ -22,7 +22,7 @@ class GameplayController < UIViewController
     @birds_killed = 0
     @time  = 1.0
     @label = UILabel.alloc.init
-    @label.text = sprintf("00:%02d", @time)
+    @label.text = ""
     @label.frame = CGRectMake(0, @@FONT_SIZE, @@SCREEN_WIDTH, @@BORDER_PADDING)
     @label.font = UIFont.fontWithName("Copperplate-Bold", size: @@FONT_SIZE)
     @label.textAlignment = UITextAlignmentCenter
@@ -47,7 +47,7 @@ class GameplayController < UIViewController
       @label.textColor = getColor(153, 31, 0)   #991F00 = 153, 31, 0
     elsif @time > 25.0 && @time < 30.0
       @label.textColor = getColor(209, 25, 25)  #D11919 = 209, 25, 25
-    elsif @time >= 5.0 #30.0
+    elsif @time >= 30.0
       @timer.invalidate
       @timer = nil
       gameEnd
@@ -104,10 +104,12 @@ class GameplayController < UIViewController
     
     img = UIImageView.alloc.initWithFrame(new_frame);
     img.animationImages = [
-      UIImage.imageNamed("bird1.png"),
-      UIImage.imageNamed("bird2.png"), 
-      UIImage.imageNamed("bird3.png"),
-      UIImage.imageNamed("bird4.png")
+      UIImage.imageNamed("bird100-1.png"),
+      UIImage.imageNamed("bird100-2.png"), 
+      UIImage.imageNamed("bird100-3.png"),
+      UIImage.imageNamed("bird100-4.png"),
+      UIImage.imageNamed("bird100-5.png"),
+      UIImage.imageNamed("bird100-6.png")
     ]    
     img.animationDuration = 1.0;
     img.animationRepeatCount = 0;
