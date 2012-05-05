@@ -3,14 +3,29 @@ class GameplayController < UIViewController
   @@SCREEN_HEIGHT = 480
   @@BORDER_PADDING = 30
   @@FONT_SIZE = 22
-  @@IMG_WIDTH = 61
-  @@IMG_HEIGHT = 100
+  @@IMG_WIDTH = 100        # 100
+  @@IMG_HEIGHT = 61        # 61
   @@START_WITH_N_BIRDS = 6
 
   @@TWEET_LINK = "https://twitter.com/intent/tweet?source=birdemia&text="
   @@FBSHARE_LINK = "http://www.facebook.com/sharer.php?u=http%3A%2F%2Fbit.ly%2Fbirdemia&t="
 
   def viewDidLoad
+    # pre load array of UIImage
+    @@ui_image_arr = [
+      UIImage.imageNamed("bird100-1.png"),
+      UIImage.imageNamed("bird100-2.png"), 
+      UIImage.imageNamed("bird100-3.png"),
+      UIImage.imageNamed("bird100-4.png"),
+      UIImage.imageNamed("bird100-5.png"),
+      UIImage.imageNamed("bird100-6.png")
+    ]
+    # load sound
+    path = NSBundle.mainBundle.pathForResource("birdcry", ofType:"wav")
+    url = NSURL.fileURLWithPath(path)
+    error_ptr = Pointer.new(:id)
+    @@birdCrySound = AVAudioPlayer.alloc.initWithContentsOfURL(url, error:error_ptr)
+    @@birdCrySound.prepareToPlay
     gameStart
   end
 
@@ -103,14 +118,7 @@ class GameplayController < UIViewController
     )
     
     img = UIImageView.alloc.initWithFrame(new_frame);
-    img.animationImages = [
-      UIImage.imageNamed("bird100-1.png"),
-      UIImage.imageNamed("bird100-2.png"), 
-      UIImage.imageNamed("bird100-3.png"),
-      UIImage.imageNamed("bird100-4.png"),
-      UIImage.imageNamed("bird100-5.png"),
-      UIImage.imageNamed("bird100-6.png")
-    ]    
+    img.animationImages = @@ui_image_arr
     img.animationDuration = 1.0;
     img.animationRepeatCount = 0;
     img.startAnimating
@@ -127,6 +135,9 @@ class GameplayController < UIViewController
   end
 
   def actionTapped(sender)
+    @@birdCrySound.currentTime = 0
+    @@birdCrySound.play
+
     img_button = sender
     img = sender.superview
     view = img.superview

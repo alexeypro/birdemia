@@ -15,4 +15,6 @@ Motion::Project::App.setup do |app|
   app.seed_id = "F93484EA-5EDD-4186-90EE-1956F1E8566A"
   app.device_family = :iphone
   app.interface_orientations = [:portrait]
+  app.frameworks << "AudioToolbox"
+  app.frameworks << "AVFoundation"
 end
