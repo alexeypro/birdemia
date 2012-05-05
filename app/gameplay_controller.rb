@@ -7,6 +7,9 @@ class GameplayController < UIViewController
   @@IMG_HEIGHT = 100
   @@START_WITH_N_BIRDS = 5
 
+  @@TWEET_LINK = "https://twitter.com/intent/tweet?source=birdemia&text="
+  @@FBSHARE_LINK = "http://www.facebook.com/sharer.php?u=http%3A%2F%2Fbit.ly%2Fbirdemia&t="
+
   def viewDidLoad
     gameStart
   end
@@ -66,11 +69,19 @@ class GameplayController < UIViewController
     alert.show
   end
 
+  def getShareMessage(birdsKilled)
+    return "Just%20killed%20" + birdsKilled.to_s + "%20birds%20in%20Birdemia%20game%20http%3A%2F%2Fbit.ly%2Fbirdemia%20%23birdemia%20%23ios%20via%20%40alexeypro%20%23FB"
+  end
+
   def alertView(alertView, clickedButtonAtIndex:buttonIndex)
     if buttonIndex == 1
-      puts "TODO: We are going to post to Facebook here..."
+      open_url = @@FBSHARE_LINK + getShareMessage(@birds_killed)
+      puts open_url
+      UIApplication.sharedApplication.openURL(NSURL.URLWithString(open_url))
     elsif buttonIndex == 2
-      puts "TODO: We are going to tweet to Twitter here..."
+      open_url = @@TWEET_LINK + getShareMessage(@birds_killed)
+      puts open_url
+      UIApplication.sharedApplication.openURL(NSURL.URLWithString(open_url))
     else
       # pretty much any other case will start game again :-)
       gameStart
