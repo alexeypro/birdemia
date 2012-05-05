@@ -73,15 +73,21 @@ class GameplayController < UIViewController
     return "Just%20killed%20" + birdsKilled.to_s + "%20birds%20in%20Birdemia%20game%20http%3A%2F%2Fbit.ly%2Fbirdemia%20%23birdemia%20%23ios%20via%20%40alexeypro%20%23FB"
   end
 
+  def openURLandStartAgain(url)
+    UIApplication.sharedApplication.openURL(NSURL.URLWithString(url))
+    alert = UIAlertView.alloc.initWithTitle("Birdemia",
+                              message: "Thanks for sharing!",
+                              delegate: self,
+                              cancelButtonTitle:"Play again",
+                              otherButtonTitles:nil)
+    alert.show
+  end
+
   def alertView(alertView, clickedButtonAtIndex:buttonIndex)
     if buttonIndex == 1
-      open_url = @@FBSHARE_LINK + getShareMessage(@birds_killed)
-      puts open_url
-      UIApplication.sharedApplication.openURL(NSURL.URLWithString(open_url))
+      openURLandStartAgain(@@FBSHARE_LINK + getShareMessage(@birds_killed))
     elsif buttonIndex == 2
-      open_url = @@TWEET_LINK + getShareMessage(@birds_killed)
-      puts open_url
-      UIApplication.sharedApplication.openURL(NSURL.URLWithString(open_url))
+      openURLandStartAgain(@@TWEET_LINK + getShareMessage(@birds_killed))
     else
       # pretty much any other case will start game again :-)
       gameStart
