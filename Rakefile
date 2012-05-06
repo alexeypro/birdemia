@@ -6,7 +6,7 @@ Motion::Project::App.setup do |app|
   app.name = "Birdemia"
   app.version = "1.0"
   app.identifier = "com.alexeypro.apps.Birdemia"
-  app.icons = ["Icon.png", "Icon@2x.png"]
+#  app.icons = ["Icon.png", "Icon@2x.png"]
   app.prerendered_icon = true
   app.sdk_version = "5.1"
   app.deployment_target = "5.0"
