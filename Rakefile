@@ -6,10 +6,10 @@ Motion::Project::App.setup do |app|
   app.name = "Birdemia"
   app.version = "1.0"
   app.identifier = "com.alexeypro.apps.Birdemia"
-#  app.icons = ["Icon.png", "Icon@2x.png"]
+  app.icons = ["Icon.png", "Icon@2x.png"]
   app.prerendered_icon = true
   app.sdk_version = "5.1"
-  app.deployment_target = "5.0"
+  app.deployment_target = "5.1"
   app.codesign_certificate = "iPhone Distribution: Olexiy Prokhorenko"
   app.provisioning_profile = "/Users/alexey/Library/MobileDevice/Provisioning Profiles/056E79C1-3E90-4B53-8D81-8AC81514336E.mobileprovision"
   app.device_family = :iphone
